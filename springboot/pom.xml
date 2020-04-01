@@ -61,6 +61,18 @@
 			<version>1.2.12</version>
 		</dependency>
 
+	<!-- jpa  用于向数据库中正向生成表单-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<!-- thymeleaf -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
 
 	</dependencies>
 

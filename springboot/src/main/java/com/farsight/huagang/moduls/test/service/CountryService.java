@@ -3,7 +3,9 @@
  */
 package com.farsight.huagang.moduls.test.service;
 
+import com.farsight.huagang.moduls.test.entity.City;
 import com.farsight.huagang.moduls.test.entity.Country;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @author  liu
@@ -15,4 +17,16 @@ import com.farsight.huagang.moduls.test.entity.Country;
 public interface CountryService {
 
 	Country getCountryById(int countryId);
+
+	Country getCountryByIdByXML(int countryId);
+
+	Country getCountryByName(String countryName);
+
+	PageInfo<City> getCitiesByPage(int countryId, int currentPage, int pageSize);
+
+	City insertCity(City city);
+
+	City updateCity(City city);
+
+	void deleteCity(int cityId);
 }
