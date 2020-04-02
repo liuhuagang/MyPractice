@@ -53,6 +53,12 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
+	public List<City> getCitiesByCountryId(int countryId) {
+//		return countryDao.getCitiesByCountryId(countryId);
+		return Optional.ofNullable(cD.getCitiesByCountryId(countryId))
+				.orElse(Collections.emptyList());
+	}
+	@Override
 	public PageInfo<City> getCitiesByPage(int countryId, int currentPage, int pageSize) {
 		PageHelper.startPage(currentPage, pageSize);
 		List<City> cities = cD.getCitiesByCountryId(countryId);

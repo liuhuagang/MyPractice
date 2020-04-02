@@ -3,6 +3,8 @@
  */
 package com.farsight.huagang.moduls.test.service;
 
+import java.util.List;
+
 import com.farsight.huagang.moduls.test.entity.City;
 import com.farsight.huagang.moduls.test.entity.Country;
 import com.github.pagehelper.PageInfo;
@@ -29,4 +31,11 @@ public interface CountryService {
 	City updateCity(City city);
 
 	void deleteCity(int cityId);
+
+	/**
+	 * @Description  
+	 * @param countryId
+	 * @return
+	 */
+	List<City> getCitiesByCountryId(int countryId);
 }
