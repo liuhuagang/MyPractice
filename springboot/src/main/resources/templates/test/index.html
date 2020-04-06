@@ -1,14 +1,21 @@
 
 <section>
-	这是一个测试 <img alt="" src="/shot-stash-black-white-working-laptop-1100x733.jpg">
+	这是一个测试 <br> <img alt="" src="/shot-stash-black-white-working-laptop-1100x733.jpg"> <br>
 	<!-- 这里的引入是基于Static已经被springboot处理掉了的绝对路径 -->
 	This is test module page.
 	<p>==================================================================</p>
 	<p>==================================================================</p>
+	
+	
+	<p th:text="{@/aaa/bbb/ccc}" >把contextpath自动加在/aaa/bbb/ccc前面</p>
 	<p>==================================================================</p>
 	<p>==================================================================</p>
 
-
+	<h3>file upload and downlod</h3>
+	<a href="/test/download?fileName=阿里巴巴Java编程规范.pdf">download file</a> <br> 
+	<a href="/test/download1?fileName=阿里巴巴Java编程规范.pdf">download file</a> <br> 
+	<a href="/test/download2?fileName=阿里巴巴Java编程规范.pdf">download file</a> <br>
+	<h3>上传单个文件</h3>
 	<p th:text="${message}"></p>
 	<p>上传文件，使用multipart/form-data类型</p>
 	<form action="/test/upload" method="post" enctype="multipart/form-data">
@@ -17,8 +24,14 @@
 	</form>
 	<br>
 
+	<h3>上传多个文件</h3>
+	<p th:text="${message}"></p>
 
-
+	<form action="/test/uploadBatchFile" method="post" enctype="multipart/form-data">
+		<input type="file" name="files">
+		<input type="file" name="files">
+		<button type="submit">上传</button>
+	</form>
 
 
 

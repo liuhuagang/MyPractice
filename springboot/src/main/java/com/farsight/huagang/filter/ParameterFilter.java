@@ -48,7 +48,7 @@ public class ParameterFilter implements Filter {
 			@Override
 			public String getParameter(String name) {
 				String value = httpRequest.getParameter(name);
-				if (value != null || value != "") {
+				if (value != null && value != "") {
 					return value.replace("fuck", "***");
 				}
 				return super.getParameter(name);

@@ -67,4 +67,11 @@ public class Resource {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+
+	@Override
+	public String toString() {
+		return "Resource [resourceId=" + resourceId + ", resourceUri=" + resourceUri + ", resourceName=" + resourceName
+				+ ", permission=" + permission + ", roles=" + roles + "]";
+	}
+	
 }

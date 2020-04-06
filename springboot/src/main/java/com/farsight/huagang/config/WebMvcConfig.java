@@ -1,5 +1,6 @@
 package com.farsight.huagang.config;
 
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
@@ -13,16 +14,16 @@ import com.farsight.huagang.filter.ParameterFilter;
 import com.farsight.huagang.interceptor.UriInterceptor;
 
 @Configuration
-@AutoConfigureAfter({WebMvcAutoConfiguration.class})
+@AutoConfigureAfter({ WebMvcAutoConfiguration.class })
 public class WebMvcConfig implements WebMvcConfigurer {
-	
-		@Autowired
-		private UriInterceptor uriInterceptor;
 
-		@Override
-		public void addInterceptors(InterceptorRegistry registry) {
-			registry.addInterceptor(uriInterceptor).addPathPatterns("/**");
-		}
+	@Autowired
+	private UriInterceptor uriInterceptor;
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(uriInterceptor).addPathPatterns("/**");
+	}
 
 		@Bean
 		public FilterRegistrationBean<ParameterFilter> filterRegister() {
@@ -30,4 +31,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
 			bean.setFilter(new ParameterFilter());
 			return bean;
 		}
+
 }
