@@ -4,6 +4,8 @@
 package com.farsight.huagang.moduls.account.service;
 
 import com.farsight.huagang.moduls.account.entity.Role;
+import com.farsight.huagang.moduls.account.entity.User;
+import com.farsight.huagang.moduls.common.vo.Result;
 import com.farsight.huagang.moduls.common.vo.SearchVo;
 import com.github.pagehelper.PageInfo;
 
@@ -28,6 +30,19 @@ public interface RoleService {
 	 * @param searchVo
 	 * @return
 	 */
-	public PageInfo<Role> getUsersBySearchVo(SearchVo searchVo);
+	public PageInfo<Role> getRolesBySearchVo(SearchVo searchVo);
 
+		
+	Role getRoleById(int roleId);
+	
+	Result updateRole(Role role);
+	
+	Result deleteRole(int roleId);
+
+	/**
+	 * @Description  
+	 * @param role
+	 * @return
+	 */
+	public Result addRole(Role role);
 }

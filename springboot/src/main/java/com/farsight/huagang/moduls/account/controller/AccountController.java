@@ -51,7 +51,7 @@ public class AccountController {
 
 	@PostMapping(value = "/doRegister", consumes = "application/json")
 	@ResponseBody
-	public com.farsight.huagang.moduls.common.vo.Result register(@RequestBody User user) {
+	public Result register(@RequestBody User user) {
 
 		return uS.addUser(user);
 	}
