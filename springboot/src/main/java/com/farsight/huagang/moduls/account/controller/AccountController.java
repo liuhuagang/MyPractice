@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.farsight.huagang.moduls.account.entity.User;
 import com.farsight.huagang.moduls.account.service.AccountService;
 import com.farsight.huagang.moduls.common.vo.Result;
+import com.farsight.huagang.moduls.common.vo.Result.ResultStatus;
 import com.farsight.huagang.moduls.test.controller.TestController;
 
 /**
@@ -37,7 +38,7 @@ public class AccountController {
 
 	@GetMapping("/index")
 	public String goIndex() {
-		return "indexSimple";
+		return "index";
 	}
 
 	@GetMapping("/gologin")
@@ -46,11 +47,7 @@ public class AccountController {
 		return "indexSimple";
 	}
 
-	@GetMapping("/register")
-	public String goResigter(ModelMap modelMap) {
 
-		return "indexSimple";
-	}
 
 	@PostMapping(value = "/doRegister", consumes = "application/json")
 	@ResponseBody
@@ -60,18 +57,15 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView login(@ModelAttribute User user, String remember, ModelAndView modelAndView) {
+	@ResponseBody
+	public Result login(@RequestBody User user, String remember, ModelAndView modelAndView) {
 
 		boolean flag = uS.login(user, remember);
 		if (flag) {
-			modelAndView.addObject("template", "account/index");
-			modelAndView.setViewName("indexSimple");
-			return modelAndView;
+
+			return new Result(ResultStatus.SUCCESS.status, "登录成功");
 		} else {
-			modelAndView.addObject("template", "account/login");
-			modelAndView.addObject("error", "用户名或者密码错误");
-			modelAndView.setViewName("indexSimple");
-			return modelAndView;
+			return new Result(ResultStatus.FAILED.status, "用户名或密码错误");
 		}
 	}
 

@@ -108,15 +108,17 @@ public class shiroConfiguration {
 		//登出
 		map.put("/account/logout", "logout");
 		map.put("/account/gologin", "anon");
+		//登录页面
+		map.put("/account/index", "anon");
+		map.put("/account/gologin", "anon");
 		map.put("/account/register", "anon");
 		map.put("/account/doRegister", "anon");
 		map.put("/account/login", "anon");
 		//对于静态资源进行放开
 		map.put("/static/**", "anon");
-		map.put("/js/**", "anon");
-		map.put("/css/**", "anon");
+		map.put("/assets/**", "anon");
 		//对所有用户认证
-		map.put("/**", "user");
+	//	map.put("/**", "user");
 		//登录
 		shiroFilterFactoryBean.setLoginUrl("/account/gologin");
 		//首页

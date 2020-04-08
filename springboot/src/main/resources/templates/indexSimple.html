@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"  
-      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<TITLE>Classes Schedule System</TITLE>
-	<META name="description" content="THORNBIRD.COM"/>
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">  
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<TITLE>SpringDemo</TITLE>
+		<META name="description" content="THORNBIRD.COM"/>
+		
+		<!-- 引入css -->
+		<!-- <link th:href="@{http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css}" rel="stylesheet" > -->
+		<link th:href="${'/css/bootstrap.min.css'}" rel="stylesheet" />
+		<link th:href="${'/font-awesome/4.5.0/css/font-awesome.min.css'}" rel="stylesheet" />
+		<link th:href="${'/css/fonts.googleapis.com.css'}" rel="stylesheet" />
+		<link th:href="${'/css/ace.min.css'}" rel="stylesheet" />
+		<link th:href="${'/css/ace-rtl.min.css'}" rel="stylesheet" />
+		
+		<!-- 引入js -->
+	    <script th:src="${'/js/jquery-2.1.4.min.js'}" type="text/javascript"></script>
+	    <script th:src="@{https://cdn.bootcss.com/layer/2.1/layer.js}" type="text/javascript"></script>
+	</head>
 	
-	<!-- 引入css -->
-	<!-- <link th:href="@{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"> -->
-	<link th:href="${'/css/main.css'}" rel="stylesheet">
-	
-	<!-- 引入js -->
-	<script th:src="${'/js/jquery-3.3.1.min.js'}" type="text/javascript"></script>
-	<script th:src="${'/js/popper.min.js'}" type="text/javascript"></script>
-	<script th:src="${'/js/bootstrap.min.js'}" type="text/javascript"></script>
-	<script th:src="${'/js/main.js'}" type="text/javascript"></script>
-	<script th:src="${'/js/plugins/pace.min.js'}" type="text/javascript"></script>
-	<script th:src="${'/js/plugins/chart.js'}" type="text/javascript"></script>
-</head>
-<body>
-	<div th:if="${template}">
-		<div th:replace="${template}"></div>
-    </div>
-</body>
+	<body class="login-layout">
+		<!-- body -->
+		<div th:if="${template}">
+			<div th:replace="${template}"></div>
+	    </div>
+	</body>
 </html>

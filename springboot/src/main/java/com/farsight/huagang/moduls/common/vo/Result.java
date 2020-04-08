@@ -1,10 +1,6 @@
 package com.farsight.huagang.moduls.common.vo;
 
-/**
- * @Description: Result
- * @author: HymanHu
- * @date: 2020年3月25日
- */
+
 public class Result {
 
 	private int status;
@@ -49,11 +45,7 @@ public class Result {
 		this.object = object;
 	}
 
-	/**
-	 * @Description: Result Status
-	 * @author: HymanHu
-	 * @date: 2020年4月3日
-	 */
+
 	public enum ResultStatus {
 		SUCCESS(200), FAILED(500);
 		
