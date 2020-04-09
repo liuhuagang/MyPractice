@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.farsight.huagang.moduls.account.dao.AccountDao;
+import com.farsight.huagang.moduls.account.dao.UserRoleDao;
 import com.farsight.huagang.moduls.account.entity.Resource;
 import com.farsight.huagang.moduls.account.entity.Role;
 import com.farsight.huagang.moduls.account.entity.User;
@@ -32,7 +33,8 @@ import com.github.pagehelper.util.StringUtil;
 public class AccountServiceImpl implements AccountService {
 	@Autowired
 	private AccountDao uD;
-
+	@Autowired
+	private UserRoleDao uRD;
 	@Override
 	public User selectUserByName(String userName) {
 
@@ -75,6 +77,16 @@ public class AccountServiceImpl implements AccountService {
 		user.setCreateDate(new Date());
 		//添加用户
 		int num = uD.addUser(user);
+		
+
+		List<Role> roles = user.getRoles();
+		if (!roles.isEmpty()) {
+			for (Role role : roles) {
+				uRD.insertUserRole(user.getUserId(), role.getRoleId());
+			}
+		}
+		
+		
 		return num == 1 ? new Result(200, "注册成功") : new Result(500, "未知错误");
 	}
 

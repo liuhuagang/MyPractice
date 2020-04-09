@@ -106,7 +106,10 @@
 			</small>
 		</h1>
 	</div><!-- /.page-header -->
-	
+		<div class="col-md-12">
+		<button id="btnAdd" type="button" class="btn btn-sm btn-success" data-toggle="modal" 
+			data-target="#userAddModal" onclick='initAddModal()'>Add</button>
+	</div>
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="clearfix">
@@ -227,15 +230,36 @@ function TData(userId, userName, password, createDate) {
 	this.password = password;
 	this.createDate = createDate;
 	this.operate = function () {
-		return "<a href='#' class='btn_editcolor' data-toggle='modal' " + 
-				"data-target='#userAddModal' onclick='initAddModal()'>新增</a>&nbsp;" + 
-			"<a href='#' class='btn_editcolor' data-toggle='modal' " + 
+		return 	"<a href='#' class='btn_editcolor' data-toggle='modal' " + 
 				"data-target='#userEditModal' onclick='initEditModal(\"" + userId + "\")'>编辑</a>&nbsp;" + 
 			"<a href='javascript:void(0);' onclick='deleteUser(\"" + userId + "\")' class='btn_editcolor'>删除</a>";
 	}
 }
 
 function initAddModal() {
+	
+	$("#rolesForUserAdd").empty();
+	$.ajax({
+		url : "/api/roles",
+		type : "get",
+		contentType: "application/json",
+		success : function (rs) {
+			$("#rolesForUserAdd").append("<label class='middle'>");
+			$.each(rs, function(i, value) {
+				$("#rolesForUserAdd").append("<input name='roleCheckboxForUserAdd' value='" + 
+						value.roleId +"' class='ace' type='checkbox'>");
+				$("#rolesForUserAdd").append("<span class='lbl'>" + 
+						value.roleName + "</span>&nbsp;");
+			});
+			$("#rolesForUserAdd").append("</label>");
+		},
+		error : function (data) {
+			layer.alert(data.responseText, {icon: 0});
+		}
+	});
+	
+	
+	
 	$("#userNameForAddPage").val("");
 	$("#passwordForAddPage").val("");
 }
@@ -244,6 +268,17 @@ function addUser() {
 	var user = {};
 	user.userName = $("#userNameForAddPage").val();
 	user.password = $("#passwordForAddPage").val();
+	
+	var roles = new Array();
+	$.each($("input[name='roleCheckboxForUserAdd']"), function(){
+		if(this.checked){
+			var role = {};
+			role.roleId = $(this).val();
+			roles.push(role);
+		}
+	});
+	user.roles = roles;
+	
 	
 	$.ajax({
 		url : "/account/doRegister",
@@ -264,6 +299,26 @@ function addUser() {
 }
 
 function initEditModal(userId) {
+	$("#rolesForUserEdit").empty();
+	$.ajax({
+		url : "/api/roles",
+		type : "get",
+		contentType: "application/json",
+		success : function (rs) {
+			$("#rolesForUserEdit").append("<label class='middle'>");
+			$.each(rs, function(i, value) {
+				$("#rolesForUserEdit").append("<input name='roleCheckboxForUserAdd' value='" + 
+						value.roleId +"' class='ace' type='checkbox'>");
+				$("#rolesForUserEdit").append("<span class='lbl'>" + 
+						value.roleName + "</span>&nbsp;");
+			});
+			$("#rolesForUserEdit").append("</label>");
+		},
+		error : function (data) {
+			layer.alert(data.responseText, {icon: 0});
+		}
+	});
+	
 	$.ajax({
 		url : "/api/user/" + userId,
 		type : "get",
@@ -271,6 +326,10 @@ function initEditModal(userId) {
 		success : function (rs) {
 			$("#userIdForEditPage").val(rs.userId);
 			$("#userNameForEditPage").val(rs.userName);
+			$.each(rs.roles, function(i, item){
+				$("input[name='roleCheckboxForUserAdd'][value=" + item.roleId + "]")
+					.attr("checked","checked");
+			});
 		},
 		error : function (data) {
 			layer.alert(data.responseText, {icon: 0});
@@ -282,6 +341,16 @@ function editUser() {
 	var user = {};
 	user.userId = $("#userIdForEditPage").val();
 	user.userName = $("#userNameForEditPage").val();
+	
+	var roles = new Array();
+	$.each($("input[name='roleCheckboxForUserAdd']"), function(){
+		if(this.checked){
+			var role = {};
+			role.roleId = $(this).val();
+			roles.push(role);
+		}
+	});
+	user.roles = roles;
 	
 	$.ajax({
 		url : "/api/user",

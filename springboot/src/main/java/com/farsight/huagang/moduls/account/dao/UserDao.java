@@ -3,8 +3,11 @@ package com.farsight.huagang.moduls.account.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -46,6 +49,10 @@ public interface UserDao {
 			+ "</script>")
 	List<User> getUsersBySearchVo(SearchVo searchVo);
 	@Select("select * from m_user where user_id=#{userId}")
+	@Results(id = "userResultTwo", value = { 
+			@Result(column = "user_id", property = "userId"),
+			@Result(column = "user_id", property = "roles", 
+			javaType = List.class, many = @Many(select = "com.farsight.huagang.moduls.account.dao.AccountDao.selectRolesByUserId")) })
 	User getUserById(int userId);
 	
 	@Update("update m_user set user_name=#{userName} where user_id=#{userId}")

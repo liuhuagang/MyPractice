@@ -3,6 +3,8 @@
  */
 package com.farsight.huagang.moduls.account.service;
 
+import java.util.List;
+
 import com.farsight.huagang.moduls.account.entity.Role;
 import com.farsight.huagang.moduls.account.entity.User;
 import com.farsight.huagang.moduls.common.vo.Result;
@@ -45,4 +47,10 @@ public interface RoleService {
 	 * @return
 	 */
 	public Result addRole(Role role);
+
+	/**
+	 * @Description  
+	 * @return
+	 */
+	public List<Role> getRolesAll();
 }

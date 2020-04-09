@@ -97,4 +97,10 @@ public class RoleServiceImpl implements RoleService {
 		roleDao.insertRole(role);
 		return result;
 	}
+
+	@Override
+	public List<Role> getRolesAll() {
+		
+		return roleDao.getRolesAll();
+	}
 }

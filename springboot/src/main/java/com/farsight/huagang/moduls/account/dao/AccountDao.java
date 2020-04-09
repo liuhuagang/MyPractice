@@ -69,8 +69,10 @@ public interface AccountDao {
 	 * @return
 	 */
 	@Select("SELECT * from m_user ")
-	@Results(id = "userResult", value = { @Result(column = "user_id", property = "userId"),
-			@Result(column = "user_id", property = "roles", javaType = List.class, many = @Many(select = "com.farsight.huagang.moduls.account.dao.AccountDao.selectRolesByUserId")) })
+	@Results(id = "userResult", value = { 
+			@Result(column = "user_id", property = "userId"),
+			@Result(column = "user_id", property = "roles", 
+			javaType = List.class, many = @Many(select = "com.farsight.huagang.moduls.account.dao.AccountDao.selectRolesByUserId")) })
 	public List<User> selectAllUsers();
 
 	@Select("SELECT r.role_id,role_name from m_user u,m_user_role ur,m_role r "
