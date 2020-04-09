@@ -26,10 +26,22 @@ import com.farsight.huagang.moduls.common.vo.SearchVo;
 @Repository
 @Mapper
 public interface RoleDao {
-	@Select("<script>" + "select * from m_role " + "<where> " + "<if test='keyWord != \"\" and keyWord != null'>"
-			+ "and role_name like '%${keyWord}%' " + "</if>" + "</where>" + "<choose>"
-			+ "<when test='orderBy != \"\" and orderBy != null'>" + "order by ${orderBy} ${sort}" + "</when>"
-			+ "<otherwise>" + "order by create_date desc" + "</otherwise>" + "</choose>" + "</script>")
+	@Select("<script>" 
+			+ "select * from m_role " 			
+			+ 	"<where> " 
+			+	"<if test='keyWord != \"\" and keyWord != null'>"
+			+ "and role_name like '%${keyWord}%' "
+			+ "</if>" 
+			+ "</where>"
+			+ "<choose>"
+			+ "<when test='orderBy != \"\" and orderBy != null'>" 
+			+ "order by ${orderBy} ${sort}" 
+			+ "</when>"
+			+ "<otherwise>" 
+			+ "order by role_id desc" 
+			+ "</otherwise>" 
+			+"</choose>" 
+			+ "</script>")
 	List<Role> getRolesBySearchVo(SearchVo searchVo);
 
 	@Insert("insert into m_role (role_name) " + "values (#{roleName})")

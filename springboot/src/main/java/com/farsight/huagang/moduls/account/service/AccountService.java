@@ -32,7 +32,7 @@ public interface AccountService {
 	 * @param rememberMe
 	 * @return
 	 */
-	public boolean login(User user, String rememberMe);
+	public Result login(User user);
 
 	/**
 	 * @Description  
@@ -71,5 +71,10 @@ public interface AccountService {
 	 * @return
 	 */
 	public Result selectAllResources();
+
+	/**
+	 * @Description  
+	 */
+	public void logout();
 
 }

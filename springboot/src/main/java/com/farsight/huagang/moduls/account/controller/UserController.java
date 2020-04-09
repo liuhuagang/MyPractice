@@ -3,6 +3,7 @@
  */
 package com.farsight.huagang.moduls.account.controller;
 
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,7 +47,7 @@ public class UserController {
 	public Result updateUser(@RequestBody User user) {
 		return userService.updateUser(user);
 	}
-
+	@RequiresRoles(value = {"admin"})
 	@DeleteMapping("/user/{userId}")
 	public Result deleteUser(@PathVariable int userId) {
 		return userService.deleteUser(userId);

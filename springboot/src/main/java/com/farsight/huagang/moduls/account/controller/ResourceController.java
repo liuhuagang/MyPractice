@@ -38,10 +38,7 @@ public class ResourceController {
 
 		return resourceService.addResource(resource);
 	}
-	
-	
-
-	@PostMapping(value = "/resources", consumes = "application/json")
+		@PostMapping(value = "/resources", consumes = "application/json")
 	public PageInfo<Resource> getResourcesBySearchVo(@RequestBody SearchVo searchVo) {
 		return resourceService.getResourcesBySearchVo(searchVo);
 	}

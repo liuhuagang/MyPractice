@@ -47,8 +47,6 @@ public class AccountController {
 		return "indexSimple";
 	}
 
-
-
 	@PostMapping(value = "/doRegister", consumes = "application/json")
 	@ResponseBody
 	public Result register(@RequestBody User user) {
@@ -58,21 +56,17 @@ public class AccountController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Result login(@RequestBody User user, String remember, ModelAndView modelAndView) {
+	public Result login(@RequestBody User user,ModelAndView modelAndView) {
 
-		boolean flag = uS.login(user, remember);
-		if (flag) {
-
-			return new Result(ResultStatus.SUCCESS.status, "登录成功");
-		} else {
-			return new Result(ResultStatus.FAILED.status, "用户名或密码错误");
-		}
+		return uS.login(user);
+	
 	}
 
 	@GetMapping("/logout")
-	public void Logout(ModelMap modelMap) {
-		modelMap.addAttribute("template", "account/login");
-		return;
+	public String Logout() {
+		uS.logout();
+		return "redirect:/account/gologin";
+
 	}
 
 	@GetMapping("/dashboard")
@@ -118,4 +112,5 @@ public class AccountController {
 		Result result = uS.selectAllResources();
 		return result;
 	}
+
 }

@@ -3,31 +3,23 @@
  */
 package com.farsight.huagang.config.shiro;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.persistence.Basic;
-import javax.servlet.Filter;
-
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.mgt.DefaultSecurityManager;
-import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.context.annotation.DependsOn;
+
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 
 /**
  * @author  liu
@@ -38,12 +30,12 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 @Configuration
 public class shiroConfiguration {
 
-	//将realm配置到容器中
 	@Bean
 	public MyRealm myRealm() {
 		MyRealm myRealm = new MyRealm();
 		myRealm.setCredentialsMatcher(credentialsMatcher());
 		return myRealm;
+
 	}
 
 	//	<!-- 凭证匹配器 -->
@@ -64,13 +56,6 @@ public class shiroConfiguration {
 		return cookieRememberMeManager;
 	}
 
-	/*	public FormAuthenticationFilter authc() {
-			FormAuthenticationFilter formAuthenticationFilter = new FormAuthenticationFilter();
-			formAuthenticationFilter.setName("authc");
-			formAuthenticationFilter.setUsernameParam("userName");
-			return formAuthenticationFilter;
-		}
-	*/
 	//记住我的cookie
 	@Bean
 	public SimpleCookie rememberMeCookie() {
@@ -79,14 +64,9 @@ public class shiroConfiguration {
 		return simpleCookie;
 	}
 
-	@Bean
-	public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-		return new LifecycleBeanPostProcessor();
-	}
-
 	//权限管理，配置Reaml的管理认证
 	@Bean
-	public SecurityManager securityManager() {
+	public DefaultWebSecurityManager securityManager() {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		securityManager.setRealm(myRealm());
 		securityManager.setRememberMeManager(rememberMeManager());
@@ -94,6 +74,26 @@ public class shiroConfiguration {
 	}
 
 	//Filter工厂，设置对应的过滤条件和跳转条件
+
+	/**
+	 * --配置shiro过滤器工厂
+	 * -----------------
+	 * --拦截权限
+	 * anon：匿名访问，无需登录
+	 * authc：登录后才能访问
+	 * user：登录过能访问
+	 * logout：登出 可以不写controller 只要配置了路径
+	 * roles：角色过滤器
+	 * ------------------
+	 * URL匹配风格
+	 * ?：匹配一个字符，如 /admin? 将匹配 /admin1，但不匹配 /admin 或 /admin/
+	 * *：匹配零个或多个字符串，如 /admin* 将匹配 /admin 或/admin123，但不匹配 /admin/1
+	 * **：匹配路径中的零个或多个路径，如 /admin/** 将匹配 /admin/a 或 /admin/a/b
+	 * -----------------------
+	 * --方法名不能乱写，如果我们定义为别的名称，又没有添加注册过滤器的配置，
+	 * --那么shiro会加载ShiroWebFilterConfiguration过滤器，
+	 * --该过滤器会寻找shiroFilterFactoryBean，找不到会抛出异常
+	 */
 	@Bean
 	public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -106,19 +106,26 @@ public class shiroConfiguration {
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		//对于静态资源进行放开
 		//登出
-		map.put("/account/logout", "logout");
-		map.put("/account/gologin", "anon");
+		//	map.put("/account/logout", "logout");
 		//登录页面
-		map.put("/account/index", "anon");
 		map.put("/account/gologin", "anon");
 		map.put("/account/register", "anon");
 		map.put("/account/doRegister", "anon");
 		map.put("/account/login", "anon");
 		//对于静态资源进行放开
 		map.put("/static/**", "anon");
-		map.put("/assets/**", "anon");
-		//对所有用户认证
-	//	map.put("/**", "user");
+		map.put("/account/images/**", "anon");
+		map.put("/js/**", "anon");
+		map.put("/css/**", "anon");
+		map.put("/font-awesome/**", "anon");
+		map.put("/fonts/**", "anon");
+		map.put("/images/**", "anon");
+		map.put("/js/**", "anon");
+		map.put("/swf/**", "anon");
+		// 如果使用“记住我功能”，则采用user规则，如果必须要用户登录，则采用authc规则
+		map.put("/**", "user");
+		//	map.put("/**", "authc");
+		//		map.put("/pay/**", "authc");
 		//登录
 		shiroFilterFactoryBean.setLoginUrl("/account/gologin");
 		//首页
@@ -136,6 +143,25 @@ public class shiroConfiguration {
 		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
 		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
 		return authorizationAttributeSourceAdvisor;
+	}
+
+	/**
+	 * --注册shiro方言，让thymeleaf支持shiro标签
+	 */
+	@Bean
+	public ShiroDialect shiroDialect() {
+		return new ShiroDialect();
+	}
+
+	/**
+	 * --自动代理类，支持Shiro的注解
+	 */
+	@Bean
+	@DependsOn({ "lifecycleBeanPostProcessor" })
+	public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
+		DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+		advisorAutoProxyCreator.setProxyTargetClass(true);
+		return advisorAutoProxyCreator;
 	}
 
 }

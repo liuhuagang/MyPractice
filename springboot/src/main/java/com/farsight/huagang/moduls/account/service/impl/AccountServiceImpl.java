@@ -21,6 +21,7 @@ import com.farsight.huagang.moduls.account.entity.User;
 import com.farsight.huagang.moduls.account.service.AccountService;
 import com.farsight.huagang.moduls.account.util.MD5Util;
 import com.farsight.huagang.moduls.common.vo.Result;
+import com.farsight.huagang.moduls.common.vo.Result.ResultStatus;
 import com.github.pagehelper.util.StringUtil;
 
 /**
@@ -35,6 +36,7 @@ public class AccountServiceImpl implements AccountService {
 	private AccountDao uD;
 	@Autowired
 	private UserRoleDao uRD;
+
 	@Override
 	public User selectUserByName(String userName) {
 
@@ -42,22 +44,21 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public boolean login(User user, String rememberMe) {
+	public Result login(User user) {
 		Subject subject = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
-		if (rememberMe != null && "remember".equals(rememberMe)) {
-			token.setRememberMe(true);
-		}
+			token.setRememberMe(user.getRememberMe());
+	
 		try {
 			subject.login(token);
 			subject.checkRoles();
 			Session session = subject.getSession();
 			session.setAttribute("loginUser", user);
+			return new Result(ResultStatus.SUCCESS.status, "登录成功");
 		} catch (Exception e) {
-			return false;
+			return new Result(ResultStatus.FAILED.status, "用户名或密码错误");
 		}
-		return true;
-
+		
 	}
 
 	@Override
@@ -77,16 +78,14 @@ public class AccountServiceImpl implements AccountService {
 		user.setCreateDate(new Date());
 		//添加用户
 		int num = uD.addUser(user);
-		
 
 		List<Role> roles = user.getRoles();
-		if (!roles.isEmpty()) {
+		if (roles != null && !roles.isEmpty()) {
 			for (Role role : roles) {
 				uRD.insertUserRole(user.getUserId(), role.getRoleId());
 			}
 		}
-		
-		
+
 		return num == 1 ? new Result(200, "注册成功") : new Result(500, "未知错误");
 	}
 
@@ -121,6 +120,13 @@ public class AccountServiceImpl implements AccountService {
 		List<Resource> users = uD.selectAllResources();
 
 		return new Result(200, "成功载入", users);
+	}
+
+	@Override
+	public void logout() {
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
+
 	}
 
 }

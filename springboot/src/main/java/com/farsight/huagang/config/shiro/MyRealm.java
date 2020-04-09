@@ -19,6 +19,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import com.farsight.huagang.moduls.account.entity.Resource;
 import com.farsight.huagang.moduls.account.entity.Role;

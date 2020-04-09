@@ -256,6 +256,25 @@
 	}
 
 	function initAddModal() {
+		$("#rolesForResourceAdd").empty();
+		$.ajax({
+			url : "/api/roles",
+			type : "get",
+			contentType: "application/json",
+			success : function (rs) {
+				$("#rolesForResourceAdd").append("<label class='middle'>");
+				$.each(rs, function(i, value) {
+					$("#rolesForResourceAdd").append("<input name='roleCheckboxForUserAdd' value='" + 
+							value.roleId +"' class='ace' type='checkbox'>");
+					$("#rolesForResourceAdd").append("<span class='lbl'>" + 
+							value.roleName + "</span>&nbsp;");
+				});
+				$("#rolesForResourceAdd").append("</label>");
+			},
+			error : function (data) {
+				layer.alert(data.responseText, {icon: 0});
+			}
+		});
 		$("#resourceUriForAddPage").val("");
 		$("#resourceNameForAddPage").val("");
 		$("#permissionForAddPage").val("");
@@ -266,6 +285,16 @@
 		resource.resourceUri = $("#resourceUriForAddPage").val();
 		resource.resourceName = $("#resourceNameForAddPage").val();
 		resource.permission = $("#permissionForAddPage").val();
+		var roles = new Array();
+		$.each($("input[name='roleCheckboxForUserAdd']"), function(){
+			if(this.checked){
+				var role = {};
+				role.roleId = $(this).val();
+				roles.push(role);
+			}
+		});
+		resource.roles = roles;
+		
 		$.ajax({
 			url : "/api/resource",
 			type : "post",
@@ -289,6 +318,25 @@
 	}
 
 	function initEditModal(resourceId) {
+		$("#rolesForResourceEdit").empty();
+		$.ajax({
+			url : "/api/roles",
+			type : "get",
+			contentType: "application/json",
+			success : function (rs) {
+				$("#rolesForResourceEdit").append("<label class='middle'>");
+				$.each(rs, function(i, value) {
+					$("#rolesForResourceEdit").append("<input name='roleCheckboxForResourceEdit' value='" + 
+							value.roleId +"' class='ace' type='checkbox'>");
+					$("#rolesForResourceEdit").append("<span class='lbl'>" + 
+							value.roleName + "</span>&nbsp;");
+				});
+				$("#rolesForResourceEdit").append("</label>");
+			},
+			error : function (data) {
+				layer.alert(data.responseText, {icon: 0});
+			}
+		});
 		$.ajax({
 			url : "/api/resource/" + resourceId,
 			type : "get",
@@ -298,6 +346,10 @@
 				$("#resourceUriForEditPage").val(rs.resourceUri);
 				$("#resourceNameForEditPage").val(rs.resourceName);
 				$("#permissionForEditPage").val(rs.permission);
+				$.each(rs.roles, function(i, item){
+					$("input[name='roleCheckboxForResourceEdit'][value=" + item.roleId + "]")
+						.attr("checked","checked");
+				});
 			},
 			error : function(data) {
 				layer.alert(data.responseText, {
@@ -313,6 +365,16 @@
 		resource.resourceUri = $("#resourceUriForEditPage").val();
 		resource.resourceName = $("#resourceNameForEditPage").val();
 		resource.permission = $("#permissionForEditPage").val();
+		var roles = new Array();
+		$.each($("input[name='roleCheckboxForResourceEdit']"), function(){
+			if(this.checked){
+				var role = {};
+				role.roleId = $(this).val();
+				roles.push(role);
+			}
+		});
+		resource.roles = roles;
+		
 		$.ajax({
 			url : "/api/resource",
 			type : "put",
