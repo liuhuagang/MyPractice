@@ -131,8 +131,8 @@ public class shiroConfiguration {
 		//首页
 		shiroFilterFactoryBean.setSuccessUrl("/account/index");
 
-		//错误页面，认证不通过跳转
-		shiroFilterFactoryBean.setUnauthorizedUrl("/error");
+		//错误页面，认证不通过跳转。这个地方跟过滤器有关
+	shiroFilterFactoryBean.setUnauthorizedUrl("/error");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
 		return shiroFilterFactoryBean;
 	}

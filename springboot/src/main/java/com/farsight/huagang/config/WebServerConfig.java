@@ -1,3 +1,4 @@
+
 package com.farsight.huagang.config;
 /**
  * 这是一个解决只有https的连接时，增加http连接的配置类
